@@ -180,7 +180,7 @@ class HttpResponseBase(six.Iterator):
             if isinstance(expires, datetime.datetime):
                 if timezone.is_aware(expires):
                     expires = timezone.make_naive(expires, timezone.utc)
-                delta = expires - expires.utcnow()
+                delta = expires - datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
                 # Add one second so the date matches exactly (a fraction of
                 # time gets lost between converting to a timedelta and
                 # then the date string).

@@ -65,8 +65,8 @@ class SessionStore(SessionBase):
         """
         modification = os.stat(self._key_to_file()).st_mtime
         if settings.USE_TZ:
-            modification = datetime.datetime.utcfromtimestamp(modification)
-            modification = modification.replace(tzinfo=timezone.utc)
+            modification = datetime.datetime.fromtimestamp(
+                modification, datetime.timezone.utc)
         else:
             modification = datetime.datetime.fromtimestamp(modification)
         return modification

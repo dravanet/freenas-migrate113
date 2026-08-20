@@ -1,7 +1,7 @@
 import errno
 import os
 import warnings
-from datetime import datetime
+from datetime import datetime, timezone as stdlib_timezone
 
 from django.conf import settings
 from django.core.exceptions import SuspiciousFileOperation
@@ -451,7 +451,7 @@ class FileSystemStorage(Storage):
         """
         if settings.USE_TZ:
             # Safe to use .replace() because UTC doesn't have DST
-            return datetime.utcfromtimestamp(ts).replace(tzinfo=timezone.utc)
+            return datetime.fromtimestamp(ts, stdlib_timezone.utc)
         else:
             return datetime.fromtimestamp(ts)
 

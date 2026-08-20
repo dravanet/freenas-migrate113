@@ -1,6 +1,6 @@
 "Database cache backend."
 import base64
-from datetime import datetime
+from datetime import datetime, timezone
 
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT, BaseCache
@@ -105,7 +105,7 @@ class DatabaseCache(BaseDatabaseCache):
             if timeout is None:
                 exp = datetime.max
             elif settings.USE_TZ:
-                exp = datetime.utcfromtimestamp(timeout)
+                exp = datetime.fromtimestamp(timeout, timezone.utc).replace(tzinfo=None)
             else:
                 exp = datetime.fromtimestamp(timeout)
             exp = exp.replace(microsecond=0)
@@ -169,7 +169,7 @@ class DatabaseCache(BaseDatabaseCache):
         table = connection.ops.quote_name(self._table)
 
         if settings.USE_TZ:
-            now = datetime.utcnow()
+            now = datetime.now(timezone.utc).replace(tzinfo=None)
         else:
             now = datetime.now()
         now = now.replace(microsecond=0)

@@ -75,7 +75,8 @@ def get_git_changeset():
     )
     timestamp = git_log.communicate()[0]
     try:
-        timestamp = datetime.datetime.utcfromtimestamp(int(timestamp))
+        timestamp = datetime.datetime.fromtimestamp(
+            int(timestamp), datetime.timezone.utc).replace(tzinfo=None)
     except ValueError:
         return None
     return timestamp.strftime('%Y%m%d%H%M%S')
